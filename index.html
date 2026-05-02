@@ -336,6 +336,34 @@ footer a { color: rgba(255,255,255,.55); }
 .benefit-card h3{font-size:1.1rem;font-weight:700;margin:0 0 10px;color:#0f172a;line-height:1.3}
 .benefit-card p{font-size:.95rem;line-height:1.6;color:#475569;margin:0}
 .benefit-card strong{color:#0f172a}
+
+/* FILTRES TRANSVERSES */
+.filters-bar { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.filters-summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.filters-count { font-size: .88rem; font-weight: 600; color: var(--ink); }
+.filters-reset { background: transparent; border: 1px solid var(--green); color: var(--green); padding: 6px 14px; border-radius: 6px; font-size: .78rem; font-weight: 600; cursor: pointer; transition: background .15s, color .15s; }
+.filters-reset:hover { background: var(--green); color: var(--white); }
+.filters-groups { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.filter-group { display: flex; flex-direction: column; gap: 8px; }
+.filter-label { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--green-dark); }
+.filter-options { display: flex; flex-direction: column; gap: 4px; }
+.filter-options label { display: flex; align-items: center; gap: 7px; font-size: .82rem; color: var(--ink); cursor: pointer; padding: 3px 4px; border-radius: 4px; transition: background .12s; user-select: none; }
+.filter-options label:hover { background: var(--green-light); }
+.filter-options label.is-disabled { opacity: .35; cursor: not-allowed; }
+.filter-options input[type="checkbox"] { accent-color: var(--green); margin: 0; }
+.opt-count { margin-left: auto; font-size: .72rem; color: var(--ink-light); font-variant-numeric: tabular-nums; }
+.product-card.is-hidden { display: none !important; }
+.filters-empty { font-size: .9rem; color: var(--ink-light); text-align: center; padding: 12px 0 0; margin: 0; }
+@media (max-width: 900px) { .filters-groups { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 540px) {
+  .filters-groups { grid-template-columns: 1fr; gap: 8px; }
+  .filter-group { border: 1px solid var(--border); border-radius: 6px; }
+  .filter-label { padding: 10px 12px; margin: 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .filter-label::after { content: "+"; font-size: 1.1rem; line-height: 1; }
+  .filter-group.is-open .filter-label::after { content: "−"; }
+  .filter-options { display: none; padding: 0 12px 12px; }
+  .filter-group.is-open .filter-options { display: flex; }
+}
 </style>
 </head>
 <body>
@@ -431,76 +459,119 @@ footer a { color: rgba(255,255,255,.55); }
     <h2 class="section-title">Nos panneaux photovoltaïques en gros — 200 références</h2>
     <p class="section-desc">Prix en HT. Réassort mensuel. Fiches techniques et certificats disponibles à la demande.</p>
 
+    <div class="filters-bar" data-filter-grid="products-grid">
+      <div class="filters-summary"><span class="filters-count" data-count>6 produits affichés</span><button type="button" class="filters-reset" data-reset hidden>Réinitialiser</button></div>
+      <div class="filters-groups">
+        <div class="filter-group">
+          <span class="filter-label">Puissance</span>
+          <div class="filter-options">
+            <label><input type="checkbox" data-filter="puissance" value="0-100"> Moins de 100 W <span class="opt-count" data-opt="puissance:0-100"></span></label>
+            <label><input type="checkbox" data-filter="puissance" value="100-300"> 100 à 300 W <span class="opt-count" data-opt="puissance:100-300"></span></label>
+            <label><input type="checkbox" data-filter="puissance" value="300-500"> 300 à 500 W <span class="opt-count" data-opt="puissance:300-500"></span></label>
+            <label><input type="checkbox" data-filter="puissance" value="sup-500"> Plus de 500 W <span class="opt-count" data-opt="puissance:sup-500"></span></label>
+          </div>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Technologie</span>
+          <div class="filter-options">
+            <label><input type="checkbox" data-filter="techno" value="mono"> Monocristallin <span class="opt-count" data-opt="techno:mono"></span></label>
+            <label><input type="checkbox" data-filter="techno" value="poly"> Polycristallin <span class="opt-count" data-opt="techno:poly"></span></label>
+            <label><input type="checkbox" data-filter="techno" value="souple"> Souple <span class="opt-count" data-opt="techno:souple"></span></label>
+            <label><input type="checkbox" data-filter="techno" value="bifacial"> Bifacial <span class="opt-count" data-opt="techno:bifacial"></span></label>
+          </div>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">MOQ</span>
+          <div class="filter-options">
+            <label><input type="checkbox" data-filter="moq" value="5"> 5 panneaux <span class="opt-count" data-opt="moq:5"></span></label>
+            <label><input type="checkbox" data-filter="moq" value="25"> 25 panneaux <span class="opt-count" data-opt="moq:25"></span></label>
+            <label><input type="checkbox" data-filter="moq" value="50"> 50 panneaux <span class="opt-count" data-opt="moq:50"></span></label>
+            <label><input type="checkbox" data-filter="moq" value="100"> 100 et + <span class="opt-count" data-opt="moq:100"></span></label>
+          </div>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Prix HT pièce</span>
+          <div class="filter-options">
+            <label><input type="checkbox" data-filter="prix" value="0-80"> Moins de 80 € <span class="opt-count" data-opt="prix:0-80"></span></label>
+            <label><input type="checkbox" data-filter="prix" value="80-200"> 80 à 200 € <span class="opt-count" data-opt="prix:80-200"></span></label>
+            <label><input type="checkbox" data-filter="prix" value="200-400"> 200 à 400 € <span class="opt-count" data-opt="prix:200-400"></span></label>
+            <label><input type="checkbox" data-filter="prix" value="sup-400"> Plus de 400 € <span class="opt-count" data-opt="prix:sup-400"></span></label>
+          </div>
+        </div>
+      </div>
+      <p class="filters-empty" data-empty hidden>Aucun produit ne correspond à votre sélection. Réinitialisez ou décochez une option.</p>
+    </div>
+
     <div class="products-grid">
 
-      <div class="product-card">
+      <div class="product-card" data-puissance="300-500" data-techno="mono" data-moq="25" data-prix="80-200">
         <div class="product-thumb">☀️<span class="product-badge">Bestseller</span></div>
         <div class="product-body">
           <div class="product-meta"><span class="meta-chip">Monocristallin</span><span class="meta-chip">400W</span><span class="meta-chip">Rendement 21%</span></div>
           <div class="product-name">Panneau mono demi-cellule 400W</div>
           <p class="product-desc">Technologie PERC demi-cellule, rendement 21%. Certifié IEC 61215, IEC 61730, CE. Garantie 25 ans. Le standard installateurs.</p>
           <div class="product-pricing"><span class="price-new">Sur devis HT</span></div>
-          <p class="product-moq">Minimum 10 panneaux</p>
+          <p class="product-moq">Minimum 25 panneaux · ~135 € HT</p>
           <a href="#contact" class="btn-product">Demander un devis</a>
         </div>
       </div>
 
-      <div class="product-card">
+      <div class="product-card" data-puissance="300-500" data-techno="bifacial" data-moq="50" data-prix="200-400">
         <div class="product-thumb">☀️<span class="product-badge">Premium</span></div>
         <div class="product-body">
           <div class="product-meta"><span class="meta-chip">Bifacial</span><span class="meta-chip">450W</span><span class="meta-chip">Rendement 22,5%</span></div>
           <div class="product-name">Panneau bifacial haute performance 450W</div>
           <p class="product-desc">Double face, gain jusqu'à +30% selon albédo. Idéal toitures claires et installations au sol. Verre-verre durabilité maximale.</p>
           <div class="product-pricing"><span class="price-new">Sur devis HT</span></div>
-          <p class="product-moq">Minimum 10 panneaux</p>
+          <p class="product-moq">Minimum 50 panneaux · ~220 € HT</p>
           <a href="#contact" class="btn-product">Demander un devis</a>
         </div>
       </div>
 
-      <div class="product-card">
+      <div class="product-card" data-puissance="sup-500" data-techno="mono" data-moq="25" data-prix="200-400">
         <div class="product-thumb">☀️</div>
         <div class="product-body">
           <div class="product-meta"><span class="meta-chip">Monocristallin</span><span class="meta-chip">550W</span><span class="meta-chip">Grand format</span></div>
           <div class="product-name">Panneau mono 550W grand format</div>
           <p class="product-desc">Format 2279×1134mm, idéal installations au sol et hangars agricoles. Réduction du nombre de modules et du câblage.</p>
           <div class="product-pricing"><span class="price-new">Sur devis HT</span></div>
-          <p class="product-moq">Minimum 10 panneaux</p>
+          <p class="product-moq">Minimum 25 panneaux · ~245 € HT</p>
           <a href="#contact" class="btn-product">Demander un devis</a>
         </div>
       </div>
 
-      <div class="product-card">
+      <div class="product-card" data-puissance="sup-500" data-techno="poly" data-moq="100" data-prix="sup-400">
         <div class="product-thumb">🏠<span class="product-badge solar">Kit</span></div>
         <div class="product-body">
-          <div class="product-meta"><span class="meta-chip">Kit complet</span><span class="meta-chip">3 à 12 kWc</span><span class="meta-chip">Raccordé réseau</span></div>
-          <div class="product-name">Kit solaire résidentiel 3-12 kWc</div>
-          <p class="product-desc">Panneaux + onduleur string + structure de montage + câbles. Prêt à installer. Plusieurs puissances disponibles dès 3 kWc.</p>
+          <div class="product-meta"><span class="meta-chip">Kit polycristallin</span><span class="meta-chip">3 à 12 kWc</span><span class="meta-chip">Raccordé réseau</span></div>
+          <div class="product-name">Kit solaire résidentiel polycristallin 3-12 kWc</div>
+          <p class="product-desc">Panneaux polycristallins + onduleur string + structure de montage + câbles. Prêt à installer. Volume installateurs.</p>
           <div class="product-pricing"><span class="price-new">Sur devis HT</span></div>
-          <p class="product-moq">Minimum 2 kits</p>
+          <p class="product-moq">Minimum 100 panneaux (kits multi-projets) · ~520 € HT</p>
           <a href="#contact" class="btn-product">Demander un devis</a>
         </div>
       </div>
 
-      <div class="product-card">
+      <div class="product-card" data-puissance="100-300" data-techno="souple" data-moq="5" data-prix="sup-400">
         <div class="product-thumb">🔋</div>
         <div class="product-body">
-          <div class="product-meta"><span class="meta-chip">Autonome</span><span class="meta-chip">Hors réseau</span><span class="meta-chip">Batterie incluse</span></div>
-          <div class="product-name">Kit solaire autonome hors réseau</div>
-          <p class="product-desc">Panneau + régulateur MPPT + batterie LiFePO4 + onduleur. Pour sites isolés, camping-cars, abris agricoles, éclairage rural.</p>
+          <div class="product-meta"><span class="meta-chip">Souple ETFE</span><span class="meta-chip">200W</span><span class="meta-chip">Hors réseau · batterie</span></div>
+          <div class="product-name">Kit autonome souple 200W + batterie</div>
+          <p class="product-desc">Panneau souple ETFE 200W + régulateur MPPT + batterie LiFePO4 + onduleur. Pour sites isolés, camping-cars, abris agricoles, éclairage rural.</p>
           <div class="product-pricing"><span class="price-new">Sur devis HT</span></div>
-          <p class="product-moq">Minimum 2 kits</p>
+          <p class="product-moq">Minimum 5 kits · ~480 € HT le kit</p>
           <a href="#contact" class="btn-product">Demander un devis</a>
         </div>
       </div>
 
-      <div class="product-card">
+      <div class="product-card" data-puissance="0-100" data-techno="poly" data-moq="100" data-prix="0-80">
         <div class="product-thumb">⚡</div>
         <div class="product-body">
-          <div class="product-meta"><span class="meta-chip">Onduleurs</span><span class="meta-chip">Microonduleurs</span><span class="meta-chip">Accessoires</span></div>
-          <div class="product-name">Onduleurs & accessoires photovoltaïques</div>
-          <p class="product-desc">Onduleurs string 3-30kW, microonduleurs, optimiseurs de puissance, câbles MC4, boîtes de jonction. Marques certifiées VDE.</p>
+          <div class="product-meta"><span class="meta-chip">Polycristallin</span><span class="meta-chip">50W</span><span class="meta-chip">Portable</span></div>
+          <div class="product-name">Mini panneau polycristallin 50W portable</div>
+          <p class="product-desc">Module compact polycristallin 50W pour camping, équipements IoT, panneautage signalétique solaire, recharge auxiliaire batterie 12V.</p>
           <div class="product-pricing"><span class="price-new">Sur devis HT</span></div>
-          <p class="product-moq">Minimum 5 unités</p>
+          <p class="product-moq">Minimum 100 unités · ~58 € HT</p>
           <a href="#contact" class="btn-product">Demander un devis</a>
         </div>
       </div>
@@ -1006,6 +1077,49 @@ footer a { color: rgba(255,255,255,.55); }
       if (errorEl) errorEl.style.display = 'block';
     }
   });
+})();
+</script>
+
+<script>
+(function(){
+  var bar = document.querySelector('.filters-bar[data-filter-grid]');
+  if (!bar) return;
+  var gridSel = bar.getAttribute('data-filter-grid');
+  var grid = bar.parentElement.querySelector('.' + gridSel);
+  if (!grid) return;
+  var cards = Array.prototype.slice.call(grid.children).filter(function(c){ return c.nodeType === 1; });
+  var checkboxes = bar.querySelectorAll('input[type="checkbox"][data-filter]');
+  var countEl = bar.querySelector('[data-count]');
+  var resetBtn = bar.querySelector('[data-reset]');
+  var emptyEl = bar.querySelector('[data-empty]');
+  var noun = (countEl && /produit/i.test(countEl.textContent)) ? 'produits' : 'éléments';
+  var total = cards.length;
+  function getActive(){ var byKey = {}; checkboxes.forEach(function(cb){ if (cb.checked){ var k = cb.getAttribute('data-filter'); (byKey[k] = byKey[k] || []).push(cb.value); } }); return byKey; }
+  function matches(card, active){ var keys = Object.keys(active); for (var i=0;i<keys.length;i++){ var k = keys[i]; var v = card.getAttribute('data-' + k); if (active[k].indexOf(v) === -1) return false; } return true; }
+  function apply(){
+    var active = getActive(); var visible = 0;
+    cards.forEach(function(card){ if (matches(card, active)){ card.classList.remove('is-hidden'); visible++; } else card.classList.add('is-hidden'); });
+    countEl.textContent = visible + ' ' + noun + (visible === total ? ' affichés' : ' sur ' + total);
+    emptyEl.hidden = visible !== 0;
+    resetBtn.hidden = Object.keys(active).length === 0;
+    checkboxes.forEach(function(cb){
+      if (cb.checked) { cb.parentElement.classList.remove('is-disabled'); return; }
+      var k = cb.getAttribute('data-filter'); var hypothetical = {};
+      Object.keys(active).forEach(function(kk){ if (kk !== k) hypothetical[kk] = active[kk]; });
+      hypothetical[k] = [cb.value];
+      var n = 0; cards.forEach(function(card){ if (matches(card, hypothetical)) n++; });
+      var opt = bar.querySelector('[data-opt="' + k + ':' + cb.value + '"]'); if (opt) opt.textContent = '(' + n + ')';
+      cb.parentElement.classList.toggle('is-disabled', n === 0); cb.disabled = n === 0;
+    });
+  }
+  function init(){
+    checkboxes.forEach(function(cb){ var k = cb.getAttribute('data-filter'); var v = cb.value; var n = cards.filter(function(c){ return c.getAttribute('data-' + k) === v; }).length; var opt = bar.querySelector('[data-opt="' + k + ':' + v + '"]'); if (opt) opt.textContent = '(' + n + ')'; });
+    countEl.textContent = total + ' ' + noun + ' affichés';
+    checkboxes.forEach(function(cb){ cb.addEventListener('change', apply); });
+    resetBtn.addEventListener('click', function(){ checkboxes.forEach(function(cb){ cb.checked = false; cb.disabled = false; cb.parentElement.classList.remove('is-disabled'); }); apply(); cards.forEach(function(c){ c.classList.remove('is-hidden'); }); countEl.textContent = total + ' ' + noun + ' affichés'; emptyEl.hidden = true; resetBtn.hidden = true; });
+    bar.querySelectorAll('.filter-group .filter-label').forEach(function(lbl){ lbl.addEventListener('click', function(){ if (window.matchMedia('(max-width: 540px)').matches){ lbl.parentElement.classList.toggle('is-open'); } }); });
+  }
+  init();
 })();
 </script>
 <!--/email_off-->
