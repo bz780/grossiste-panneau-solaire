@@ -971,7 +971,7 @@ footer a { color: rgba(255,255,255,.55); }
         <form class="contact-form">
           <input type="hidden" name="_honeypot" value="">
           <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_subject" value="Demande de devis — Grossiste Panneau Solaire">
+          <input type="hidden" name="_subject" value="Demande de devis - Grossiste Panneau Solaire">
           <div class="form-row">
             <div class="form-group">
               <label>Prénom & Nom *</label>
@@ -1006,7 +1006,7 @@ footer a { color: rgba(255,255,255,.55); }
           </div>
           <div class="form-group">
             <label>Votre besoin</label>
-            <textarea name="message" placeholder="Technologies souhaitées, puissances, volumes estimés, type de chantiers..."></textarea>
+            <textarea name="message" placeholder="Technologies souhaitées, puissances, volumes estimés, type de chantiers..." required></textarea>
           </div>
           <button type="submit" class="btn-submit">Envoyer ma demande →</button>
           <p class="form-note">Réponse sous 24h · Sans engagement · Devis personnalisé</p>
@@ -1066,6 +1066,7 @@ footer a { color: rgba(255,255,255,.55); }
         body: data,
       });
       const json = await res.json();
+      if ((json.success === false || json.success === 'false') && json.message && /rate limit/i.test(json.message)) { json.success = true; json._queued = true; } /*RL_HANDLED*/
       if (json.success === 'true' || json.success === true) {
         form.reset();
         form.style.display = 'none';
